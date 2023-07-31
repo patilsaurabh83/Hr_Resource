@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+</head>
+<body>
+    <!-- <div class="container d-flex align-items-center justify-content-center">
+        <div class="form ">            <div class="tab-content">
+                <div id="login">
+                    <h1><b>Login</b></h1>
+                    <form #signUpForm="ngForm" (ngSubmit)="loginUser()">
+   
+                        <div class="field-wrap">
+                            <label>
+                                Email Address<span class="req">*</span>
+                            </label>
+                            <input [(ngModel)]="user.email" name="email" type="text" required />
+                        </div>
+   
+                        <div class="field-wrap">
+                            <label>
+                                Password<span class="req">*</span>
+                            </label>
+                            <input [(ngModel)]="user.password" name="password" type="password" required autocomplete="off" />
+                        </div>
+   
+                        <button class="button button-block">Log In</button>
+   
+                    </form>
+   
+                </div>
+   
+            </div>
+   
+        </div>
+    </div> -->
+
+
+    <!-- <div class="container d-flex align-items-center justify-content-center">
+        <div class="form ">
+            <div class="tab-content">
+                <div id="login">
+                    <h1><b>Login</b></h1>
+                    <form #loginForm="ngForm" (ngSubmit)="loginUser()">
+                        <div class="field-wrap">
+                            <label>Email Address<span class="req">*</span></label>
+                            <input [(ngModel)]="user.email" name="email" type="text" required />
+                            <div class="error" *ngIf="loginForm.controls['email'].invalid && loginForm.controls['email'].touched">Email is required</div>
+                        </div>
+                        <div class="field-wrap">
+                            <label>Password<span class="req">*</span></label>
+                            <input [(ngModel)]="user.password" name="password" type="password" required autocomplete="off" />
+                            <div class="error" *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched">Password is required</div>
+                        </div>
+                        <button class="button button-block" [disabled]="!user.email || !user.password">Log In</button>
+                        <span class="error-message" *ngIf="serverErrorMessages">{{ serverErrorMessages }}</span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html> -->
+
+
+<div class="container d-flex align-items-center justify-content-center">
+
+    <div class="form">
+
+        <h1>Sign In</h1>
+
+        <form #signInForm="ngForm" (ngSubmit)="loginUser(signInForm)">
+
+            <div class="field-wrap">
+
+                <label>Email</label>
+
+                <input type="text" name="email" [(ngModel)]="user.email" #emailField="ngModel" required>
+
+                <div class="error-msg" *ngIf="emailField.invalid && emailField.touched">Please provide a valid email
+
+                    address.</div>
+
+            </div>
+
+            <div class="field-wrap">
+
+                <label>Password</label>
+
+                <input type="password" name="password" [(ngModel)]="user.password" #passwordField="ngModel" required>
+
+                <div class="error-msg" *ngIf="passwordField.invalid && passwordField.touched">Please provide a password.
+
+                </div>
+
+            </div>
+
+            <div class="field-wrap">
+
+                <span class="error-msg" *ngIf="serverErrorMessages">{{ serverErrorMessages }}</span>
+
+            </div>
+
+            <button type="submit" class="button-block" [disabled]="signInForm.invalid">Sign In</button>
+
+        </form>
+
+    </div>
+
+</div>

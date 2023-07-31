@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+   <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="admin.component.css">
+
+  <body>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <img src="../assets/img_avatar.png" alt="Avatar" class="avatar"> &nbsp;
+          <a class="navbar-brand">Admin Dashboard</a>
+          <div class="navbar-collapse justify-content-end ml-auto" >
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" (click)="toggle('ShowButtons')" style="cursor: pointer;">Operation View</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" style="cursor: pointer;">Policy</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" (click)="toggle('aboutUs')" style="cursor: pointer;">About Us</a>
+              </li>
+            </ul>
+          </div>
+          <div class="navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <span class="nav-link welcome-message">Welcome Back {{userName}}</span>
+              </li>
+              <li class="nav-item">
+                <button class="btn btn-primary logout-btn" (click)="logOut()" type="button">Logout</button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        
+      
+
+    <!-- Rest of your content goes here -->
+
+    <div class="dashboard">
+      <div class="left-side" *ngIf="formName == 'ShowButtons'">
+        <button class="dashboard-button" (click)="toggle('addEmployee')">Register Employee</button>
+        <button class="dashboard-button" (click)="toggle('deleteEmployee')">Remove Employee</button>
+        <button class="dashboard-button" (click)="toggle('assignJob')">Update Job</button>
+        <button class="dashboard-button" (click)="toggle('assignManager')">Update Manager</button>
+        <button class="dashboard-button" (click)="toggle('assignDepartment')">Update Department</button>
+        <button class="dashboard-button" (click)="toggle('updateSalesPercentage')">Update Sales Percentage</button>
+        <button class="dashboard-button" (click)="toggle('getCommissionedEmployees')">Commissioned Employees</button>
+        <button class="dashboard-button" (click)="toggle('getEmployeeByDeptId')">DepartmentWise Employees</button>
+        <button class="dashboard-button" (click)="toggle('getNonCommissionedEmployees')">Non-commissioned Employees</button>
+        <button class="dashboard-button" (click)="toggle('getAllManagerDetails')">Manager Details</button>
+        <button class="dashboard-button" (click)="toggle('getEmployeesByLocation')">LocationWise Employees</button>
+        <button class="dashboard-button" (click)="toggle('getEmployeesByHireDate')">Employees by HireDate Range</button>
+        <button class="dashboard-button" (click)="toggle('getJobHistory')">Job History</button>
+        <button class="dashboard-button" (click)="toggle('findMaxMinSalaryByDepartment')">Salary of Department</button>
+        <button class="dashboard-button" (click)="toggle('findMaxMinSalaryByJob')">Salary of Job</button>
+        <button class="dashboard-button" (click)="toggle('findMaxMinSalaryForAllJobs')">Salary of All Jobs</button>
+
+      </div>
+
+      
+
+
+      <div class="right-side">
+        <form class="form-container" (ngSubmit)="employeeForm.valid && addEmployee()" #employeeForm="ngForm"
+          *ngIf="formName == 'addEmployee'">
+          <h3>Add Employee</h3>
+          <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" [(ngModel)]="firstName" required
+              #firstNameInput="ngModel">
+            <div *ngIf="firstNameInput.invalid && (firstNameInput.dirty || firstNameInput.touched)"
+              class="error-message">
+              First Name is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" [(ngModel)]="lastName" required #lastNameInput="ngModel">
+            <div *ngIf="lastNameInput.invalid && (lastNameInput.dirty || lastNameInput.touched)" class="error-message">
+              Last Name is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" [(ngModel)]="email" required #emailInput="ngModel">
+            <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" class="error-message">
+              Email is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="number" id="phoneNumber" name="phoneNumber" [(ngModel)]="phoneNumber" required
+              #phoneNumberInput="ngModel">
+            <div *ngIf="phoneNumberInput.invalid && (phoneNumberInput.dirty || phoneNumberInput.touched)"
+              class="error-message">
+              Phone Number is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="hireDate">Hire Date:</label>
+            <input type="date" id="hireDate" name="hireDate" [(ngModel)]="hireDate" required #hireDateInput="ngModel" [max]="getCurrentDate()">
+            <div *ngIf="hireDateInput.invalid && (hireDateInput.dirty || hireDateInput.touched)" class="error-message" >
+              Hire Date is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="salary">Salary:</label>
+            <input type="number" id="salary" name="salary" [(ngModel)]="salary" required #salaryInput="ngModel">
+            <div *ngIf="salaryInput.invalid && (salaryInput.dirty || salaryInput.touched)" class="error-message">
+              Salary is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="departmentName">Department ID:</label>
+            <select [(ngModel)]="departmentId" name="departmentId" required #departmentIdInput="ngModel">
+              <option *ngFor="let department of departments" [value]="department.departmentId">
+                {{ department.departmentId }} - {{ department.departmentName }}
+              </option>
+            </select>
+            <div *ngIf="departmentIdInput.invalid && (departmentIdInput.dirty || departmentIdInput.touched)"
+              class="error-message">
+              Department ID is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="jobId">Job ID:</label>
+            <select [(ngModel)]="jobId" name="jobId" required #jobIdInput="ngModel">
+              <option *ngFor="let job of jobs" [value]="job.jobId">{{ job.jobId }} - {{ job.jobTitle }}</option>
+            </select>
+            <div *ngIf="jobIdInput.invalid && (jobIdInput.dirty || jobIdInput.touched)" class="error-message">
+              Job ID is required.
+            </div>
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+        
+
+
+
+
+
+
+
+        <!-- Form to delete the Employee -->
+        <form *ngIf="formName == 'deleteEmployee'" (ngSubmit)="fullName !== 'Employee Does not exist' && deleteEmployee(employee.employeeId)">
+          <div class="form-container">
+            <h3>Delete Employee</h3>
+            <div class="form-group">
+              <label for="employeeId">Employee ID:</label>
+              <input type="number" name="employeeId" [(ngModel)]="employee.employeeId" (blur)="fetchEmployeeName()">
+            </div>
+            <div class="form-group">
+              <label for="employeeName">Employee Name:</label>
+              <input type="text" name="employeeName" [(ngModel)]="fullName" readonly>
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+          </div>
+        </form>
+
+
+        <!-- To assign job to the Employee -->
+        <form *ngIf="formName == 'assignJob'" (ngSubmit)="fullName !== 'Employee Does not exist' && updateJob(employee.employeeId,jobId)">
+          <div class="form-container">
+            <h3>Assign Job</h3>
+
+            <div class="form-group">
+              <label for="jobId">Job Id:</label>
+              <select [(ngModel)]="jobId" name="jobId" required>
+                <option *ngFor="let job of jobs" [value]="job.jobId">{{ job.jobId }} - {{ job.jobTitle }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="employeeId">Employee ID:</label>
+              <input type="text" id="employeeId" name="employeeId" [(ngModel)]="employee.employeeId"
+                (blur)="fetchEmployeeName()">
+            </div>
+            <div class="form-group">
+              <label for="employeeName">Employee Name:</label>
+              <input type="text" id="employeeName" name="employeeName" [(ngModel)]="fullName">
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+          </div>
+        </form>
+
+
+        <!-- Assign Manager Form -->
+
+        <form (ngSubmit)="fullName !== 'Employee Does not exist' && updateManager(employee.employeeId, employee.manager.employeeId)" #form="ngForm">
+          <div *ngIf="formName == 'assignManager'" class="form-container">
+            <h3>Assign Manager</h3>
+            <div class="form-group">
+              <label for="managerId">Manager ID:</label>
+              <input type="number" id="managerId" name="managerId" [(ngModel)]="employee.manager.employeeId"
+                (blur)="fetchManagerName()" required #managerIdInput="ngModel">
+              <div *ngIf="managerIdInput.invalid && (managerIdInput.dirty || managerIdInput.touched)" class="error-text">
+                Manager ID is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="managerId">Manager Name:</label>
+              <input type="text" id="managerName" name="managerName" [(ngModel)]="managerName" readonly>
+            </div>
+            <div class="form-group">
+              <label for="employeeId">Employee ID:</label>
+              <input type="number" id="employeeId" name="employeeId" [(ngModel)]="employee.employeeId"
+                (blur)="fetchEmployeeName()" required #employeeIdInput="ngModel">
+              <div *ngIf="employeeIdInput.invalid && (employeeIdInput.dirty || employeeIdInput.touched)" class="error-text">
+                Employee ID is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="employeeName">Employee Name:</label>
+              <input type="text" id="employeeName" name="employeeName" [(ngModel)]="fullName" readonly>
+            </div>
+            <button type="submit" class="submit-button" [disabled]="form.invalid">Submit</button>
+          </div>
+        </form>
+        
+
+
+        <!-- Assign the Department -->
+
+        <form (ngSubmit)="updateEmpDepartment(employee.employeeId,employee.department.departmentId)">
+          <div *ngIf="formName == 'assignDepartment'" class="form-container">
+            <h3>Assign Department</h3>
+            <div class="form-group">
+              <label for="departmentName">Department ID:</label>
+              <select [(ngModel)]="employee.department.departmentId" name="departmentId" required #departmentIdInput="ngModel">
+                <option *ngFor="let department of departments" [value]="department.departmentId">
+                  {{ department.departmentId }} - {{ department.departmentName }}
+                </option>
+              </select>
+              </div>
+            <div class="form-group">
+              <label for="employeeId">Employee ID:</label>
+              <input type="number" id="employeeId" name="employeeId" [(ngModel)]="employee.employeeId"
+                (blur)="fetchEmployeeName()" required>
+            </div>
+            <div class="form-group">
+              <label for="employeeName">Employee Name:</label>
+              <input type="text" id="employeeName" name="employeeName" [(ngModel)]="fullName" readonly>
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+          </div>
+        </form>
+
+
+
+        <!-- Update Dept as well as Sales -->
+
+        <form (ngSubmit)="updateSalesPercentage(employee.employeeId, employee.department.departmentId, employee.commissionPct)" #form="ngForm">
+          <div *ngIf="formName == 'updateSalesPercentage'" class="form-container">
+            <h3>Update Department and Sales Percentage</h3>
+            <div class="form-group">
+              <label for="departmentName">Department ID:</label>
+              <select [(ngModel)]="employee.department.departmentId" name="departmentId" required #departmentIdInput="ngModel">
+                <option *ngFor="let department of departments" [value]="department.departmentId">
+                  {{ department.departmentId }} - {{ department.departmentName }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="employeeId">Employee ID:</label>
+              <input type="number" id="employeeId" name="employeeId" (blur)="fetchEmployeeName()"
+                [(ngModel)]="employee.employeeId" required #employeeIdInput="ngModel">
+              <div *ngIf="employeeIdInput.invalid && (employeeIdInput.dirty || employeeIdInput.touched)" class="error-message">
+                Employee ID is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="employeeName">Employee Name:</label>
+              <input type="text" id="employeeName" name="employeeName" [(ngModel)]="fullName" readonly>
+            </div>
+            <div class="form-group">
+              <label for="salesPercentage">Sales Percentage:</label>
+              <input type="number" id="salesPercentage" name="salesPercentage" [(ngModel)]="employee.commissionPct" #salesPercentageInput="ngModel">
+              <div *ngIf="salesPercentageInput.invalid && (salesPercentageInput.dirty || salesPercentageInput.touched)" class="error-message">
+                Sales Percentage is required.
+              </div>
+            </div>
+            <button type="submit" class="submit-button" [disabled]="form.invalid">Submit</button>
+          </div>
+        </form>
+        
+        
+
+
+
+
+        <!-- Get all the employees with the department Id -->
+        <form (ngSubmit)='toggle("GetEmployeeByDeptNo")'>
+          <div *ngIf="formName == 'getEmployeeByDeptId'" class="form-container">
+            <h3>Get Employee by Dept ID</h3>
+            <div class="form-group" (click)="fetchEmployeesByDeptId(employee.department.departmentId)">
+              <label for="departmentName">Department ID:</label>
+              <select [(ngModel)]="employee.department.departmentId" name="departmentId" required #departmentIdInput="ngModel">
+                <option *ngFor="let department of departments" [value]="department.departmentId">
+                  {{ department.departmentId }} - {{ department.departmentName }}
+                </option>
+              </select>
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+          </div>
+        </form>
+
+        <form>
+          <div *ngIf="formName == 'GetEmployeeByDeptNo'">
+            <table>
+              <thead>
+                <tr>
+                  <th>Employee ID</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>Hire Date</th>
+                  <th>Job ID</th>
+                  <th>Salary</th>
+                  <th>Commission Pct</th>
+                  <th>Department</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let employee of employees">
+                  <td>{{ employee?.employeeId }}</td>
+                  <td>{{ employee?.firstName }}</td>
+                  <td>{{ employee?.lastName }}</td>
+                  <td>{{ employee?.email }}</td>
+                  <td>{{ employee?.phoneNumber }}</td>
+                  <td>{{ employee?.hireDate }}</td>
+                  <td>{{ employee?.jobId?.jobId }}</td>
+                  <td>{{ employee?.salary }}</td>
+                  <td>{{ employee?.commissionPct }}</td>
+                  <td>{{ employee?.department?.departmentId }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+
+
+
+        <!-- To get the location wise employee List   -->
+        <form *ngIf="formName == 'getEmployeesByLocation'"   
+           (ngSubmit)="toggle('fetchEmpByLocationForm')"
+          #modifyLocationForm="ngForm" class="form-container" (click)="getEmployeesByLocation()">
+          <div class="form-group">
+            <label for="locationDropdown">Location:</label>
+            <select id="locationDropdown" name="locationDropdown" [(ngModel)]="newLocationId">
+              <option *ngFor="let location of locations" [value]="location.locationId">{{location.locationId }} - {{ location.city }}</option>
+            </select>
+          </div>
+          <button type="submit" class="dashboard-button">Submit</button>
+        </form>
+
+        <form>
+          <div *ngIf="formName == 'fetchEmpByLocationForm' && locationwiseEmployees && locationwiseEmployees.length > 0">
+            
+            <table>
+              <thead>
+                <tr>
+                  <th>Employee ID</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>Hire Date</th>
+                  <th>Job ID</th>
+                  <th>Salary</th>
+                  <th>Commission Pct</th>
+                  <th>Department</th>
+                  <th>Location Id</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let employee of locationwiseEmployees">
+                  <td>{{ employee?.employeeId }}</td>
+                  <td>{{ employee?.firstName }}</td>
+                  <td>{{ employee?.lastName }}</td>
+                  <td>{{ employee?.email }}</td>
+                  <td>{{ employee?.phoneNumber }}</td>
+                  <td>{{ employee?.hireDate }}</td>
+                  <td>{{ employee?.jobId?.jobId }}</td>
+                  <td>{{ employee?.salary }}</td>
+                  <td>{{ employee?.commissionPct }}</td>
+                  <td>{{ employee?.department?.departmentId }}</td>
+                  <td>{{ newLocationId }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <ng-container *ngIf="formName == 'fetchEmpByLocationForm' && (!locationwiseEmployees || locationwiseEmployees.length === 0)">
+          <span class="no-data-message">No data found.</span>
+        </ng-container>
+
+
+
+        <!-- Get all the employees by range between two Hiredates -->
+
+        <form *ngIf="formName == 'getEmployeesByHireDate'" (ngSubmit)='toggle("hireDateForm")'>
+          <div class="form-container" (click)="fetchHireRangeByEmployees(this.hireDateFrom, this.hireDateTo)">
+            <h3>Get Employees by Hire Date</h3>
+            <div class="form-group">
+              <label for="hireDateFrom">Hire Date From:</label>
+              <input type="date" id="hireDateFrom" name="hireDateFrom" [(ngModel)]="hireDateFrom"
+                placeholder="yyyy-mm-dd" [max]="getCurrentDate()">
+            </div>
+            <div class="form-group">
+              <label for="hireDateTo">Hire Date To:</label>
+              <input type="date" id="hireDateTo" name="hireDateTo" [(ngModel)]="hireDateTo" placeholder="yyyy-mm-dd"
+              [max]="getCurrentDate()">
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+          </div>
+        </form>
+
+        <div *ngIf="formName == 'hireDateForm'">
+          <table>
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Hire Date</th>
+                <th>Job ID</th>
+                <th>Salary</th>
+                <th>Commission Pct</th>
+                <th>Department</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of hireDateEmployees">
+                <td>{{ employee?.employeeId }}</td>
+                <td>{{ employee?.firstName }}</td>
+                <td>{{ employee?.lastName }}</td>
+                <td>{{ employee?.email }}</td>
+                <td>{{ employee?.phoneNumber }}</td>
+                <td>{{ employee?.hireDate }}</td>
+                <td>{{ employee?.jobId?.jobId }}</td>
+                <td>{{ employee?.salary }}</td>
+                <td>{{ employee?.commissionPct }}</td>
+                <td>{{ employee?.department?.departmentId }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+
+
+
+        <!-- getCommissionedEmployees -->
+
+        <div *ngIf="formName == 'getCommissionedEmployees'">
+          <table>
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Hire Date</th>
+                <th>Job ID</th>
+                <th>Salary</th>
+                <th>Commission Pct</th>
+                <th>Department</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of comissionedEmployee">
+                <td>{{ employee?.employeeId }}</td>
+                <td>{{ employee?.firstName }}</td>
+                <td>{{ employee?.lastName }}</td>
+                <td>{{ employee?.email }}</td>
+                <td>{{ employee?.phoneNumber }}</td>
+                <td>{{ employee?.hireDate }}</td>
+                <td>{{ employee?.jobId?.jobId }}</td>
+                <td>{{ employee?.salary }}</td>
+                <td>{{ employee?.commissionPct }}</td>
+                <td>{{ employee?.department?.departmentId }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <!-- Get employees with no Comission  -->
+        <div *ngIf="formName == 'getNonCommissionedEmployees'">
+          <table>
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Hire Date</th>
+                <th>Job ID</th>
+                <th>Salary</th>
+                <th>Commission Pct</th>
+                <th>Department</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of nonComissionedEmployee">
+                <td>{{ employee?.employeeId }}</td>
+                <td>{{ employee?.firstName }}</td>
+                <td>{{ employee?.lastName }}</td>
+                <td>{{ employee?.email }}</td>
+                <td>{{ employee?.phoneNumber }}</td>
+                <td>{{ employee?.hireDate }}</td>
+                <td>{{ employee?.jobId?.jobId }}</td>
+                <td>{{ employee?.salary }}</td>
+                <td>{{ employee?.commissionPct }}</td>
+                <td>{{ employee?.department?.departmentId }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <!-- //Get all the manager Details -->
+        <form>
+          <div *ngIf="formName == 'getAllManagerDetails'">
+            <table>
+              <thead>
+                <tr>
+                  <th>Employee ID</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>Hire Date</th>
+                  <th>Job ID</th>
+                  <th>Salary</th>
+                  <th>Commission Pct</th>
+                  <th>Department</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let employee of managerDetails">
+                  <td>{{ employee?.employeeId }}</td>
+                  <td>{{ employee?.firstName }}</td>
+                  <td>{{ employee?.lastName }}</td>
+                  <td>{{ employee?.email }}</td>
+                  <td>{{ employee?.phoneNumber }}</td>
+                  <td>{{ employee?.hireDate }}</td>
+                  <td>{{ employee?.jobId?.jobId }}</td>
+                  <td>{{ employee?.salary }}</td>
+                  <td>{{ employee?.commissionPct }}</td>
+                  <td>{{ employee?.department?.departmentId }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+
+        <!-- to get the experience of the employee  -->
+
+
+
+
+        <!-- get min and max salary for all jobs  -->
+        <form>
+          <div *ngIf="formName == 'findMaxMinSalaryForAllJobs'">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Job ID</th>
+                  <th>Job Title</th>
+                  <th>Min Salary</th>
+                  <th>Max Salary</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let job of jobs">
+                  <td>{{ job.jobId }}</td>
+                  <td>{{ job.jobTitle }}</td>
+                  <td>{{ job.minSalary }}</td>
+                  <td>{{ job.maxSalary }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+
+
+
+        <!-- Get the min and max salary by dept  -->
+        <form (ngSubmit)='toggle("minAndMaxSalByDept")'>
+          <div class="form-container" *ngIf="formName =='findMaxMinSalaryByDepartment'">
+            <div class="form-group" (click)="getSalaryStats(selectedDepartment)">
+              <label for="department">Department ID:</label>
+              <select id="department" name="department" [(ngModel)]="selectedDepartment">
+                <option *ngFor="let department of departments" [value]="department.departmentId">{{
+                  department.departmentId }} - {{department.departmentName}}</option>
+              </select>
+            </div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+
+
+        <div *ngIf="formName == 'minAndMaxSalByDept'">
+          <table>
+            <thead>
+              <tr>
+                <th>Department ID</th>
+                <th>Department Name</th>
+                <th>Min Salary</th>
+                <th>Max Salary</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ selectedDepartment }}</td>
+                <td>{{ departmentName }}</td>
+                <td>{{ minSalary }}</td>
+                <td>{{ maxSalary }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+
+        <!-- Get the min and max salary by Job   -->
+
+        <form (ngSubmit)='toggle("minAndMaxSalByJobTitle")'>
+          <div class="form-container" *ngIf="formName =='findMaxMinSalaryByJob'">
+            <div class="form-group" (click)="getSalaryStatsByJob(selectedJobTitle)">
+              <label for="jobId">Job Title:</label>
+              <select [(ngModel)]="selectedJobTitle" name="jobId" (blur)="fetchJobId()" required>
+                <option *ngFor="let job of jobs" [value]="job.jobTitle">{{ job.jobTitle }}</option>
+              </select>
+            </div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+
+        <div *ngIf="formName == 'minAndMaxSalByJobTitle'">
+          <table>
+            <thead>
+              <tr>
+                <th>Job ID</th>
+                <th>Job Title</th>
+                <th>Min Salary</th>
+                <th>Max Salary</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ newJobId }}</td>
+                <td>{{ selectedJobTitle }}</td>
+                <td>{{ jobMinSalary }}</td>
+                <td>{{ jobMaxSalary }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+
+    <!-- Get all Job History  -->
+        <div> 
+        <form>
+          <div *ngIf="formName == 'getJobHistory'">
+            <table>
+              <thead>
+                <tr>
+                  <th>Employee ID</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Job ID</th>
+                  <th>Dept ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let history of jobHistoryData">
+                  <td>{{ history.employee.employeeId }}</td>
+                  <td>{{ history.startDate }}</td>
+                  <td>{{ history.endDate }}</td>
+                  <td>{{ history.job.jobId }}</td>
+                  <td>{{ history.department.departmentId }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>  
+
+    
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+
+  </html>

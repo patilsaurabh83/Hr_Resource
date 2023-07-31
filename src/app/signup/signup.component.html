@@ -1,0 +1,287 @@
+<!-- <!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+
+</head>
+
+<body> -->
+
+    <!-- <div class=" d-flex align-items-center justify-content-center">
+
+          <div class="form">
+
+         
+
+              <div class="tab-content">
+
+                  <div id="signup">
+
+                      <h1>Sign Up</h1>
+
+                      <form #signUpForm="ngForm" (ngSubmit)="onSubmit(signUpForm)">
+
+                          <div class="top-row">
+
+                              <div class="field-wrap">
+
+                                  <label>First Name*</label>
+
+                                  <input name="firstname" ngModel  type="text" />
+
+                            </div>
+
+                              <div class="field-wrap">
+
+                                  <label>Last Name*</label>
+
+                                  <input name="lastname" ngModel type="text" />
+
+                            </div>
+
+                        </div>
+
+                          <div class="field-wrap">
+
+                              <label>Email Address*</label>
+
+                              <input name="email"  ngModel type="email" />
+
+                        </div>
+
+                          <div class="field-wrap">
+
+                              <label>Set A Password*</label>
+
+                              <input name="password" ngModel type="password"/>
+
+                        </div>
+
+                          <div class="field-wrap">
+
+                              <label>Select Role*</label>
+
+                              <select id="role" name="role" ngModel >
+
+                                  <option value="admin">ADMIN</option>
+
+                                  <option value="employee">EMPLOYEE</option>
+
+                            </select>
+
+                        </div>
+
+                          <button type="submit" class="button button-block">Get Started</button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div> -->
+
+
+    <!-- <div class="d-flex align-items-center justify-content-center">
+        <div class="form">
+            <div class="tab-content">
+                <div id="signup">
+                    <h1>Sign Up</h1>
+                    <form #signUpForm="ngForm" (ngSubmit)="onSubmit(signUpForm)">
+                        <div class="top-row">
+                            <div class="field-wrap">
+                                <label>First Name*</label>
+                                <input name="firstname" ngModel type="text" required />
+                                <div class="error" *ngIf="signUpForm.controls['firstname'].invalid && signUpForm.controls['firstname'].touched">First name is required</div>
+                            </div>
+                            <div class="field-wrap">
+                                <label>Last Name*</label>
+                                <input name="lastname" ngModel type="text" required />
+                                <div class="error" *ngIf="signUpForm.controls['lastname'].invalid && signUpForm.controls['lastname'].touched">Last name is required</div>
+                            </div>
+                        </div>
+                        <div class="field-wrap">
+                            <label>Email Address*</label>
+                            <input name="email" ngModel type="email" required />
+                            <div class="error" *ngIf="signUpForm.controls['email'].invalid && signUpForm.controls['email'].touched">Email is required</div>
+                        </div>
+                        <div class="field-wrap">
+                            <label>Set A Password*</label>
+                            <input name="password" ngModel type="password" required />
+                            <div class="error" *ngIf="signUpForm.controls['password'].invalid && signUpForm.controls['password'].touched">Password is required</div>
+                        </div>
+                        <div class="field-wrap">
+                            <label>Select Role*</label>
+                            <select id="role" name="role" ngModel required>
+                                <option value="">Select a role</option>
+                                <option value="admin">ADMIN</option>
+                                <option value="employee">EMPLOYEE</option>
+                            </select>
+                            <div class="error" *ngIf="signUpForm.controls['role'].invalid && signUpForm.controls['role'].touched">Role is required</div>
+                        </div>
+                        <button type="submit" class="button button-block" [disabled]="signUpForm.invalid">Register</button>
+                        <span class="error-message" *ngIf="serverErrorMessages">{{ serverErrorMessages }}</span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+
+    <!DOCTYPE html>
+
+    <html lang="en">
+
+
+
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Document</title>
+
+    </head>
+
+
+
+
+    <body>
+
+        <div class="d-flex align-items-center justify-content-center">
+
+            <div class="form">
+
+                <div class="tab-content">
+
+                    <div id="login">
+
+                        <h1><b>Login</b></h1>
+
+                        <form #signUpForm="ngForm" (ngSubmit)="onSubmit(signUpForm)" novalidate>
+
+                            <div class="field-wrap">
+
+                                <label>
+
+                                    First Name<span class="req">*</span>
+
+                                </label>
+
+                                <input ngModel name="firstname" type="text" required #firstnameField="ngModel" />
+
+                                <div class="error-msg" *ngIf="firstnameField.invalid && firstnameField.touched">Please
+                                    provide a first name.</div>
+
+                            </div>
+
+                            <div class="field-wrap">
+
+                                <label>
+
+                                    Last Name<span class="req">*</span>
+
+                                </label>
+
+                                <input ngModel name="lastname" type="text" required #lastnameField="ngModel" />
+
+                                <div class="error-msg" *ngIf="lastnameField.invalid && lastnameField.touched">Please
+                                    provide a last name.</div>
+
+                            </div>
+
+                            <div class="field-wrap">
+
+                                <label>
+
+                                    Email Address<span class="req">*</span>
+
+                                </label>
+
+                                <input ngModel name="email" type="email" required #emailField="ngModel"
+                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" />
+
+                                <div class="error-msg" *ngIf="emailField.invalid && emailField.touched">Please provide
+                                    an valid email address.</div>
+
+                            </div>
+
+                            <div class="field-wrap">
+
+                                <label>
+
+                                    Set A Password<span class="req">*</span>
+
+                                </label>
+
+                                <input ngModel name="password" type="password" required autocomplete="off"
+                                    #passwordField="ngModel" />
+
+                                <div class="error-msg" *ngIf="passwordField.invalid && passwordField.touched">Please
+                                    provide a password.</div>
+
+                            </div>
+
+                            <div class="field-wrap">
+
+                                <label>Select Role*</label>
+
+                                <select id="role" ngModel name="role" required #roleField="ngModel">
+
+                                    <option value="">Select Role</option>
+
+                                    <option value="admin">ADMIN</option>
+
+                                    <option value="employee">EMPLOYEE</option>
+
+                                </select>
+
+                                <div class="error-msg" *ngIf="roleField.invalid && roleField.touched">Please select a
+                                    role.</div>
+
+                            </div>
+
+                            <button class="button button-block" [disabled]="signUpForm.invalid">Get Started</button>
+
+                            <div *ngIf="serverErrorMessages" class="alert alert-danger p-2 border border-dark mt-3"
+                                role="alert">
+
+                                <strong>{{serverErrorMessages}}</strong>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </body>
+
+
+
+
+    </html>
+
+<!-- </body>
+
+</html> -->

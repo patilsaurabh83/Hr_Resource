@@ -1,0 +1,157 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Employee Dashboard</title>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="employee.component.css">
+  </head>
+      <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <img src="../assets/officer.png" alt="Avatar" class="avatar"> &nbsp; &nbsp;
+          <a class="navbar-brand">Employee Dashboard</a>
+          <div class="navbar-collapse justify-content-end ml-auto">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" (click)="toggle('ShowButtons')" style="cursor: pointer;">Operation View</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" style="cursor: pointer;">Policy</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" (click)="toggle('aboutUs')" style="cursor: pointer;">About Us</a>
+              </li>
+            </ul>
+          </div>
+          <div class="navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <span class="nav-link welcome-message">Welcome Back {{userName}}</span>
+              </li>
+              <li class="nav-item">
+                <button class="btn btn-primary logout-btn" (click)="logOut()" type="button">Logout</button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+    <div class="dashboard-container">
+      <div class="left-side" *ngIf= "formName == 'ShowButtons'">
+        <button class="dashboard-button" (click)="toggle('modifyPhoneNumber')">Update Phone Number</button><br>
+        <button class="dashboard-button" (click)="toggle('modifyEmail')">Update Email</button><br>
+        <button class="dashboard-button" (click)="toggle('modifyName')">Update Name</button><br>
+        <button class="dashboard-button" (click)="toggle('seeLocations')">Locations</button><br>
+        
+      </div>
+      
+      <div class="right-side">       
+
+        <!-- //to update the phone number  -->       
+
+        <form class="form-container"
+          (ngSubmit)="updateEmpPhoneNumber(employee.phoneNumber,oldPhoneNumber)" *ngIf= "formName == 'modifyPhoneNumber'">
+            <div class="form-group"  >
+              <label for="employeeId">Employee ID:</label>
+              <input type="number" id="employeeId" name="employeeId" [(ngModel)]="employee.employeeId"
+               (blur)="fetchEmployeeName()" (blur)="fetchEmployeePhoneNumber()" required>
+            </div>
+            <div class="form-group">
+              <label for="employeeName">Employee Name:</label>
+              <input type="text" id="employeeName" name="employeeName" [(ngModel)]="fullName"  readonly>
+            </div>
+            <div class="form-group">
+              <label for="oldPhoneNumber">Old Phone Number:</label>
+              <input type="text" id="oldPhoneNumber" name="oldPhoneNumber" [(ngModel)]="oldPhoneNumber" readonly>
+            </div>
+            <div class="form-group">
+              <label for="newPhoneNumber">New Phone Number:</label>
+              <input type="number" id="newPhoneNumber" name="newPhoneNumber" [(ngModel)]="employee.phoneNumber"
+              placeholder="0.000.000.0000" required>
+            </div>
+            <button type="submit" class="dashboard-button">Submit</button>
+          </form>
+        
+        <!-- Add more forms for other functionalities -->
+        <!-- To update the email Address -->
+
+        <form class="form-container" *ngIf="formName == 'modifyEmail'"
+        (ngSubmit)="updateEmpEmail(employee.email,oldEmail)">
+          <div class="form-group">
+            <label for="employeeId">Employee ID:</label>
+            <input type="number" id="employeeId" name="employeeId" [(ngModel)]="employee.employeeId" 
+            (blur)="fetchEmployeeName()" (blur)="fetchEmployeeEmail()" required>
+          </div>
+          <div class="form-group">
+            <label for="employeeName">Employee Name:</label>
+            <input type="text" id="employeeName" name="employeeName" [(ngModel)]="fullName" required>
+          </div>
+          <div class="form-group">
+            <label for="oldEmail">Old Email:</label>
+            <input type="text" id="oldEmail" name="oldEmail" [(ngModel)]="oldEmail" readonly>
+          </div>
+          <div class="form-group">
+            <label for="newEmail">New Email:</label>
+            <input type="text" id="newEmail" name="newEmail" [(ngModel)]="employee.email" required>
+          </div>
+          <button type="submit" class="dashboard-button">Submit</button>
+        </form>
+
+
+
+        <!-- To update the name of the employee -->
+
+        <form *ngIf="formName == 'modifyName'" #modifyNameForm="ngForm" 
+        (ngSubmit)="updateEmpName(employee.employeeId,employee.firstName,employee.lastName)" class="form-container">
+          <div class="form-group" *ngIf="formName == 'modifyName'">
+            <label for="employeeId">Employee ID:</label>
+            <input type="number" id="employeeId" name="employeeId"
+            (blur)="fetchEmployeeName()" [(ngModel)]="employee.employeeId" required>
+          </div>
+          <div class="form-group">
+            <label for="oldName">Old Name:</label>
+            <input type="text" id="oldName" name="oldName" [(ngModel)]="fullName" readonly>
+          </div>
+          <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" [(ngModel)]="employee.firstName" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" [(ngModel)]="employee.lastName" required>
+          </div>
+          <button type="submit" class="dashboard-button">Submit</button>
+        </form>
+
+
+
+        <table *ngIf="formName == 'seeLocations'" class="location-table">
+          <thead>
+            <tr>
+              <th>Location ID</th>
+              <th>Street Address</th>
+              <th>Postal Code</th>
+              <th>City</th>
+              <th>State/Province</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let location of locations">
+              <td>{{ location.locationId }}</td>
+              <td>{{ location.streetAddress }}</td>
+              <td>{{ location.postalCode }}</td>
+              <td>{{ location.city }}</td>
+              <td>{{ location?.stateProvince }}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+    </div>
+    
+    <script src="employee-dashboard.js"></script>
+  
+    <!-- Rest of your content goes here -->
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+  </html>
+  
